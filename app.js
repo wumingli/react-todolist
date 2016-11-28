@@ -148,9 +148,11 @@ let Todo = React.createClass({
                     <li className={currentPath === 'active' ? 'active' : ''}><Link to="/active">未完成</Link></li>
                     <li className={currentPath === 'done' ? 'active' : ''}><Link to="/done">已完成</Link></li>
                 </ul>
-                <span className="un-completed">
-                    还有<i>{activeCounter}</i>个未完成的任务
-                </span>
+                {
+                    currentPath !== 'done' ?
+                        <span className="un-completed">还有<Link to="/active"><i>{activeCounter}</i></Link>个未完成的任务</span>
+                        : null
+                }
                 {
                     hasDoneData
                         ? <span className="clear-done" onClick={this.clearDone}>清除已完成</span>
