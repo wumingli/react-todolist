@@ -24,14 +24,14 @@ const MainRouter = () => (
             <Match exactly pattern="/active" component={Todo} />
             <Match pattern="/done" component={Todo} />
             <Miss component={NoMatch} />
-            {/*<Redirect to="/" />*/}
         </div>
     </Router>
 );
 let Todo = React.createClass({
     getInitialState() {
+        //fetch('http://10.252.167.212:3000/test?id=123456');
         return {
-            data: localData
+            data: Store.fetch()
         };
     },
     addTodo(e) {
@@ -40,43 +40,99 @@ let Todo = React.createClass({
         if (ipt.value.trim() === '') {
             return;
         }
-        let newData = [{
-            title: ipt.value,
-            done: false
-        }];
-        localData = localData.length === 0 ? newData : localData.concat(newData);
-        Store.save(localData);
         this.setState({
-            data: localData
+            data: this.state.data.concat({
+                title: ipt.value,
+                done: false
+            })
+        }, () => {
+            Store.save(this.state.data);
+            ipt.value = '';
         });
-        ipt.value = '';
+    },
+    removeTodo(todo) {
+        let tempData = [];
+        this.state.data.map((item) => {
+            if (todo !== item) {
+                tempData.push(item);
+            }
+        });
+
+        this.setState({
+            data: tempData
+        });
+        Store.save(tempData);
     },
     updateTodo(todo) {
-        this.state.data = localData.map((item) => {
+        let tempData = this.state.data.map((item) => {
             if (todo === item) {
                 item.done = !todo.done;
             }
             return item;
         });
         this.setState({
-            data: this.state.data
+            data: tempData
         });
-        Store.save(this.state.data);
+        Store.save(tempData);
+    },
+    clearDone() {
+        let tempData = [];
+        this.state.data.map((item) => {
+            if (!item.done) {
+                tempData.push(item);
+            }
+        });
+
+        console.log('data after clear:', tempData);
+        this.setState({
+            data: tempData
+        });
+
+        Store.save(tempData);
     },
     render() {
-        console.log(this.props);
+        var hasDoneData = false,
+            activeCounter = 0;
         const currentPath = this.props.pathname.substring(1);
-        let List = localData.length === 0 ? null :
-            this.state.data.map((item) => {
-                var key = Math.random();
-                return (
-                    <li key={key} className={'todo' + (item.done ? ' completed': '')}>
-                    <input onChange={this.updateTodo.bind(this, item)} checked={item.done} className="toggle" name={key} id={key} type="checkbox" />
-                    <label htmlFor={key}>{item.title}</label>
-                    <button className="destroy"/>
-                    </li>
-                );
-            });
+        const shownTodos = this.state.data.filter((todo) => {
+            switch (currentPath) {
+                case 'active':
+                    return !todo.done;
+                case 'done':
+                    return todo.done;
+                default:
+                    return true;
+            }
+        });
+
+        var List = shownTodos.map((item) => {
+            var key = Math.random();
+            if (item.done) {
+                hasDoneData = true;
+            } else {
+                activeCounter++;
+            }
+            return (
+                <li key={key} className={'todo' + (item.done ? ' completed': '')}>
+                <input onChange={() => {
+                    this.updateTodo(item);
+                }}
+                       checked={item.done}
+                       className="toggle"
+                       name={key}
+                       id={key}
+                       type="checkbox" />
+                <label htmlFor={key}>{item.title}</label>
+                <button className="destroy" onClick={() => {
+                    this.removeTodo(item);
+                }} />
+                </li>
+            );
+        });
+
+        if (List.length === 0) {
+            List = <li className="no-data"><span>暂无数据</span></li>;
+        }
 
         return(
             <div className="todo-app">
@@ -92,6 +148,15 @@ let Todo = React.createClass({
                     <li className={currentPath === 'active' ? 'active' : ''}><Link to="/active">未完成</Link></li>
                     <li className={currentPath === 'done' ? 'active' : ''}><Link to="/done">已完成</Link></li>
                 </ul>
+                <span className="un-completed">
+                    还有<i>{activeCounter}</i>个未完成的任务
+                </span>
+                {
+                    hasDoneData
+                        ? <span className="clear-done" onClick={this.clearDone}>清除已完成</span>
+                        : null
+                }
+
             </div>
         );
     }

@@ -21,6 +21,12 @@ html, body ,h1, h2, h3, h4, h5, h6, ul, li, dl, dt, dd, ol, p, span {
     color: rgba(175, 47, 47, 0.15);
     text-rendering: optimizeLegibility;
   }
+  .clear-done {
+    position: absolute;
+    right: 15px;
+    bottom: 40px;
+    color: #ff4081;
+  }
 }
 .todo-list {
   margin: 0;
@@ -58,6 +64,7 @@ html, body ,h1, h2, h3, h4, h5, h6, ul, li, dl, dt, dd, ol, p, span {
       border: none; /* Mobile Safari */
       -webkit-appearance: none;
       appearance: none;
+      outline: none;
       &:after {
         content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#ededed" stroke-width="3"/></svg>');
       }
@@ -163,5 +170,24 @@ html, body ,h1, h2, h3, h4, h5, h6, ul, li, dl, dt, dd, ol, p, span {
   color: #ff4081;
   a {
     color: #09c;
+  }
+}
+.no-data {
+  text-align: center;
+  padding: 10px 0;
+  span {
+    font-size: 16px;
+    color: #666;
+  }
+}
+.un-completed {
+  position: absolute;
+  left: 15px;
+  bottom: 40px;
+  i {
+    font-style: normal;
+    color: #ff4081;
+    padding: 3px;
+    font-weight: bold;
   }
 }
