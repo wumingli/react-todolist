@@ -33,8 +33,8 @@ class Todo extends React.Component {
         this.state = {
             data: Store.fetch()
         };
-        /*this.addTodo = this.addTodo.bind(this);
-        this.clearDone = this.clearDone.bind(this);*/
+        this.addTodo = this.addTodo.bind(this);
+        this.clearDone.bind(this);/**/
     }
     addTodo(e) {
         e.preventDefault();
@@ -141,8 +141,8 @@ class Todo extends React.Component {
         return(
             <div className="todo-app">
                 <h1>任务清单</h1>
-                <form onSubmit={this.addTodo.bind(this)}>
-                    <input className="new-todo" placeholder="回车添加新任务" />
+                <form onSubmit={this.addTodo}>
+                    <input className="new-todo" defaultValue={this.state.text} placeholder="回车添加新任务" />
                 </form>
                 <ul className="todo-list">
                     {List}
