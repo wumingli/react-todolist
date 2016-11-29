@@ -7,8 +7,8 @@ webpack 是一个模块打包工具。它使得模块相互依赖并且可构建
 
 参考: 
 
-* (一小时包教会 —— webpack 入门指南)[http://www.w2bc.com/Article/50764]
-* (webpack常用配置总结)[http://www.cnblogs.com/zhengjialux/p/5861845.html]
+* [一小时包教会 —— webpack 入门指南](http://www.w2bc.com/Article/50764)
+* [webpack常用配置总结](http://www.cnblogs.com/zhengjialux/p/5861845.html)
 
 
 
@@ -19,5 +19,5 @@ webpack 是一个模块打包工具。它使得模块相互依赖并且可构建
 
 ## 不错的教程
 
-* 阮一峰老师写的 (《React 入门实例教程》)[http://www.ruanyifeng.com/blog/2015/03/react.html]
-* 极客学院的React中文教程 [http://wiki.jikexueyuan.com/project/react/]
+* 阮一峰老师写的 [《React 入门实例教程》]([http://www.ruanyifeng.com/blog/2015/03/react.html)
+* 极客学院的React中文教程 (http://wiki.jikexueyuan.com/project/react/)[http://wiki.jikexueyuan.com/project/react/]
