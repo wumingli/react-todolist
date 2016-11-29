@@ -27,13 +27,15 @@ const MainRouter = () => (
         </div>
     </Router>
 );
-let Todo = React.createClass({
-    getInitialState() {
-        //fetch('http://10.252.167.212:3000/test?id=123456');
-        return {
+class Todo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             data: Store.fetch()
         };
-    },
+        /*this.addTodo = this.addTodo.bind(this);
+        this.clearDone = this.clearDone.bind(this);*/
+    }
     addTodo(e) {
         e.preventDefault();
         let ipt = e.target.querySelector('input');
@@ -49,7 +51,7 @@ let Todo = React.createClass({
             Store.save(this.state.data);
             ipt.value = '';
         });
-    },
+    }
     removeTodo(todo) {
         let tempData = [];
         this.state.data.map((item) => {
@@ -62,7 +64,7 @@ let Todo = React.createClass({
             data: tempData
         });
         Store.save(tempData);
-    },
+    }
     updateTodo(todo) {
         let tempData = this.state.data.map((item) => {
             if (todo === item) {
@@ -74,22 +76,24 @@ let Todo = React.createClass({
             data: tempData
         });
         Store.save(tempData);
-    },
+    }
     clearDone() {
-        let tempData = [];
-        this.state.data.map((item) => {
-            if (!item.done) {
-                tempData.push(item);
-            }
-        });
+        if (window.confirm('确认清除已完成的任务？')) {
+            let tempData = [];
+            this.state.data.map((item) => {
+                if (!item.done) {
+                    tempData.push(item);
+                }
+            });
 
-        console.log('data after clear:', tempData);
-        this.setState({
-            data: tempData
-        });
+            console.log('data after clear:', tempData);
+            this.setState({
+                data: tempData
+            });
 
-        Store.save(tempData);
-    },
+            Store.save(tempData);
+        }
+    }
     render() {
         var hasDoneData = false,
             activeCounter = 0;
@@ -114,18 +118,18 @@ let Todo = React.createClass({
             }
             return (
                 <li key={key} className={'todo' + (item.done ? ' completed': '')}>
-                <input onChange={() => {
-                    this.updateTodo(item);
-                }}
-                       checked={item.done}
-                       className="toggle"
-                       name={key}
-                       id={key}
-                       type="checkbox" />
-                <label htmlFor={key}>{item.title}</label>
-                <button className="destroy" onClick={() => {
-                    this.removeTodo(item);
-                }} />
+                    <input onChange={() => {
+                        this.updateTodo(item);
+                    }}
+                           checked={item.done}
+                           className="toggle"
+                           name={key}
+                           id={key}
+                           type="checkbox" />
+                    <label htmlFor={key}>{item.title}</label>
+                    <button className="destroy" onClick={() => {
+                        this.removeTodo(item);
+                    }} />
                 </li>
             );
         });
@@ -137,11 +141,11 @@ let Todo = React.createClass({
         return(
             <div className="todo-app">
                 <h1>任务清单</h1>
-                <form onSubmit={this.addTodo}>
+                <form onSubmit={this.addTodo.bind(this)}>
                     <input className="new-todo" placeholder="回车添加新任务" />
                 </form>
                 <ul className="todo-list">
-                {List}
+                    {List}
                 </ul>
                 <ul className="set-status">
                     <li className={currentPath === '' ? 'active' : ''}><Link to="/">全部</Link></li>
@@ -155,13 +159,13 @@ let Todo = React.createClass({
                 }
                 {
                     hasDoneData
-                        ? <span className="clear-done" onClick={this.clearDone}>清除已完成</span>
+                        ? <span className="clear-done" onClick={this.clearDone.bind(this)}>清除已完成</span>
                         : null
                 }
 
             </div>
         );
     }
-});
+}
 
 render(<MainRouter/>, document.querySelector('#react'));
